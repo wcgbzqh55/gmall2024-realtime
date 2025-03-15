@@ -7,6 +7,7 @@ import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.wcg.gmall.realtime.common.constant.Constant;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class FlinkSourceUtil {
                 .setBootstrapServers(Constant.KAFKA_BROKERS)
                 .setTopics(topic)
                 .setGroupId(groupId)
+//                .setProperty(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed")
                 // 生产环境中一般为了保证消费的精准一致性，需要手动维护偏移量，KafkaSource --> KafkaSourceReader --> 存储偏移量
                 // .setStartingOffsets(OffsetsInitializer.committedOffsets(OffsetResetStrategy.LATEST))
                 // ack=1 幂等性 事务
