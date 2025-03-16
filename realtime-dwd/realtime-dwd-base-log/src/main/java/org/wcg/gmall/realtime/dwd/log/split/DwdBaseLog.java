@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.common.state.StateTtlConfig;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.time.Time;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
@@ -20,6 +22,7 @@ import org.wcg.gmall.realtime.common.constant.Constant;
 import org.wcg.gmall.realtime.common.util.DateFormatUtil;
 import org.wcg.gmall.realtime.common.util.FlinkSinkUtil;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -171,6 +174,10 @@ public class DwdBaseLog extends BaseApp {
                     public void open(Configuration parameters) throws Exception {
                         ValueStateDescriptor<String> valueStateDescriptor
                                 = new ValueStateDescriptor<String>("lastVisitDateState", String.class);
+//                        valueStateDescriptor.enableTimeToLive(StateTtlConfig.newBuilder(Time.fromDuration(Duration.ofSeconds(10)))
+//                                        .setUpdateType(StateTtlConfig.UpdateType.OnCreateAndWrite)
+//                                        .setStateVisibility(StateTtlConfig.StateVisibility.NeverReturnExpired)
+//                                .build());
                         lastVisitDateState = getRuntimeContext().getState(valueStateDescriptor);
                     }
 
